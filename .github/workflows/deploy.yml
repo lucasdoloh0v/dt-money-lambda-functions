@@ -1,0 +1,32 @@
+name: Deploy Lambdas
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build ZIPs
+        run: |
+          chmod +x scripts/build.sh
+          ./scripts/build.sh
+
+      - name: Deploy para AWS Lambda
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+        run: |
+          for file in dist/*.zip; do
+            name=$(basename "$file" .zip)
+            echo "⏫ Deploying $name"
+            aws lambda update-function-code \
+              --function-name $name \
+              --zip-file fileb://$file \
+              --region $AWS_REGION
+          done

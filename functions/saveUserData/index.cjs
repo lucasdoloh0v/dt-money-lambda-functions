@@ -4,7 +4,7 @@ const client = new DynamoDBClient({ region: 'us-east-2' });
 
 exports.handler = async (event) => {
   try {
-    const body = JSON.parse(event);
+    const body = JSON.parse(event.body);
 
     const { userId, name, email } = body;
 

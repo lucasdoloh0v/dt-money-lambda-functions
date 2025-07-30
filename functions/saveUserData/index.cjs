@@ -14,8 +14,8 @@ exports.handler = async (event) => {
         userId: { S: userId },
         name: { S: name },
         email: { S: email },
-        createdAt: { S: new Date().toISOString() },
-        updatedAt: { S: new Date().toISOString() },
+        created_at: { S: new Date().toISOString() },
+        updated_at: { S: new Date().toISOString() },
       },
     });
 

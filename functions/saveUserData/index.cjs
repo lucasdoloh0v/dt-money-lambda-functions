@@ -4,12 +4,12 @@ const client = new DynamoDBClient({ region: 'us-east-2' });
 
 exports.handler = async (event) => {
   try {
-    const body = JSON.parse(event.body);
+    const body = JSON.parse(event);
 
     const { userId, name, email } = body;
 
     const command = new PutItemCommand({
-      TableName: 'Users',
+      TableName: 'Dt-Money-Users',
       Item: {
         userId: { S: userId },
         name: { S: name },

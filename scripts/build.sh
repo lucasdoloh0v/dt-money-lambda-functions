@@ -4,7 +4,7 @@ set -e
 
 mkdir -p dist
 
-for dir in funcoes/*; do
+for dir in functions/*; do
   if [ -d "$dir" ]; then
     name=$(basename "$dir")
     echo "🔧 Empacotando função: $name"

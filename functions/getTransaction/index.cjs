@@ -1,6 +1,33 @@
+const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
+const { unmarshall } = require('@aws-sdk/util-dynamodb')
+
+const client = new DynamoDBClient({ region: 'us-east-2' })
+
 exports.handler = async (event) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Saída registrada com sucesso!' })
-  };
+  try {
+    const userId = event.requestContext.authorizer.claims.sub
+
+    const command = new QueryCommand({
+      TableName: 'transactions',
+      IndexName: 'userId-index',
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': { S: userId },
+      },
+    })
+
+    const result = await client.send(command)
+
+    const items = result.Items.map((item) => unmarshall(item))
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(items),
+    }
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Internal Server Error', error: error.message }),
+    }
+  }
 };

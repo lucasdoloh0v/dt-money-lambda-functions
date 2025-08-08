@@ -11,3 +11,8 @@ Este projeto organiza funções AWS Lambda usando Node.js, com deploy manual ou 
 
 ```bash
 ./scripts/build.sh
+```
+
+## Acesse o repositório do app DT-Money
+
+[DT-Money](https://github.com/lucasdoloh0v/dt-money)

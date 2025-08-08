@@ -5,12 +5,15 @@ const client = new DynamoDBClient({ region: 'us-east-2' })
 
 exports.handler = async (event) => {
   try {
-    const userId = event.requestContext.authorizer.claims.sub
+    const userId = event.requestContext.authorizer.jwt.claims.sub
 
     const command = new QueryCommand({
-      TableName: 'transactions',
-      IndexName: 'userId-index',
-      KeyConditionExpression: 'userId = :userId',
+      TableName: 'Dt-Money-Transactions',
+      IndexName: 'user-id-index',
+      KeyConditionExpression: '#uid= :userId',
+      ExpressionAttributeNames: {
+        '#uid': 'user-id',
+      },
       ExpressionAttributeValues: {
         ':userId': { S: userId },
       },
